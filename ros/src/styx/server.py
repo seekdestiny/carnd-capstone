@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import socketio
@@ -22,9 +21,6 @@ def connect(sid, environ):
 
 def send(topic, data):
     s = 1
-    msgs.append((topic, data))
-    #sio.emit(topic, data=json.dumps(data), skip_sid=True)
-
 bridge = Bridge(conf, send)
 
 @sio.on('telemetry')

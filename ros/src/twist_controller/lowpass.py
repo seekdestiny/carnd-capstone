@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 class LowPassFilter(object):
     def __init__(self, tau, ts):

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Activation, Dropout, Convolution2D, MaxPooling2D, Flatten, Dense
 from keras.models import Sequential

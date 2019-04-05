@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from attrdict import AttrDict
 
 conf = AttrDict({
