@@ -72,3 +72,20 @@ cd CarND-Capstone/ros
 roslaunch launch/site.launch
 ```
 5. Confirm that traffic light detection works on real life images
+
+### Carla Architecture
+Carla is the name of a Udacity self-driving car, whose computer would run students' Capstone project code to see how well it drives around the test track.
+
+From structure perspective, Carla has four subsystem as illustrated below: sensors, perception, planning, and control. The data flow direction is from left to right, with each subsystem's output taken as input for various components of the next subsystem.
+
+<img src="imgs/Carla_subsystems_structure.PNG" width=600>
+
+Carla's Sensors subsystem consists of physical hardware that gathers data about the environment, in the form of camera, radar and lidar, and sometimes other types of sensors too. Cameras are mounted behind the rear view mirror in a row, a single radar is embedded in the front bumper, and a lidar is mounted on the roof. 
+
+Raw sensor data is then interpreted by Perception subsystem, where detection of relevant objects in surrounding area, and localization of Carla itself happens. For camera images, they serve as inputs for the detection of lanes, traffic lights and signs, and other objects outside the vehicle, processed by deep learning and computer vision algorithms. For radar and lidar sensor measurements, they provide information that can be translated into distance, speed, and relative position of objects with reference to the vehicle, thus enable us to track the motion of other vehicles, pedestrians, bicycles, etc. Since lidar provides three-dimensional information about the surroundings, include surface characteristics, it also contributes to localization of Carla by comparing the scanned environment to a high-definition map. By combining GPS and lidar data, the precision of Carla's localization can reach 10 centimeters or less.
+
+The output of Perception subsystem is then routed to the Planning subsystem. The path planning components uses perception data to predict the movements of other vehicles on the road, and evaluate different behaviors to decide which one is best for current scenario. Then the trajectory planning block would calculate a series of waypoints for Carla to follow, based on the chosen behavior. For example, if traffic light detection and classification component detects red light, then it is reasonable to predict that the vehicle in front of Carla would slow down, consequently the best behavior might be decelerate, and new waypoints would be built with target velocities being slower than current velocity and target lane remaining as current lane. Similarly, if free space is detected in adjacent lanes, or if a sign with different speed limit is detected, the Planning system would be affected and Carla might be instructed to behave differently.
+
+The final subsystem Control subsystem takes the list of waypoints and target velocities calculated by Planning subsystem as input. Carla uses the simple proportional-integral-derivative (PID) controller to map waypoints to steering and throttle commands, and the commands would be ultimately translated to Controller Area Network (CAN) messages executed by various actuators, most commonly the engine control module and power steering module.
+
+In summary: sensor and perception subsystems collect data and interpret data to detect objects around the vehicle and localize itself; planning subsystem determines appropriate behavior and generate a trajectory accordingly; and finally the control system drives Carla along that trajectory.
